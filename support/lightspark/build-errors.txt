@@ -1,0 +1,5 @@
+Under some circumstances, lightspark may fail to build with the error:
+
+    error: 'CodedID' does not name a type: did you mean 'AVCodecID'?
+
+To fix this, delete the './bld/lightspark' directory and re-try building lightspark.

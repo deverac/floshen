@@ -1,0 +1,10 @@
+#!/bin/sh
+# This runs lightspark using software rendering; software rendering is slower
+# than using OpenGL.
+#
+# Depending on your hardware, you may need to specify additional variables. e.g.
+#    LIBGL_ALWAYS_SOFTWARE=true GALLIUM_DRIVER=llvmpipe lightspark $*
+#
+# Environment variables can be found at https://docs.mesa3d.org/envvars.html
+
+LIBGL_ALWAYS_SOFTWARE=true lightspark $*

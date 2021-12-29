@@ -1,0 +1,317 @@
+diff --git a/cygnal/testsuite/cygnal.all/Makefile.am b/cygnal/testsuite/cygnal.all/Makefile.am
+index a6d1dd55c..a7449d16c 100644
+--- a/cygnal/testsuite/cygnal.all/Makefile.am
++++ b/cygnal/testsuite/cygnal.all/Makefile.am
+@@ -19,7 +19,7 @@
+ 
+ ## Process this file with automake to generate Makefile.in
+ 
+-AUTOMAKE_OPTIONS = dejagnu
++AUTOMAKE_OPTIONS = dejagnu subdir-objects
+ 
+ noinst_LTLIBRARIES = libcygnal.la
+ libcygnal_la_SOURCES = \
+diff --git a/gui/Makefile.am b/gui/Makefile.am
+index a3933c3e3..c37e68056 100644
+--- a/gui/Makefile.am
++++ b/gui/Makefile.am
+@@ -21,7 +21,7 @@
+ # haiku-gnash and dump-gnash
+ #
+ 
+-AUTOMAKE_OPTIONS = -Wno-portability
++AUTOMAKE_OPTIONS = -Wno-portability subdir-objects
+ 
+ SUBDIRS = .
+ 
+diff --git a/gui/pythonmod/Makefile.am b/gui/pythonmod/Makefile.am
+index 4cb6750a6..898bbfe9b 100644
+--- a/gui/pythonmod/Makefile.am
++++ b/gui/pythonmod/Makefile.am
+@@ -16,6 +16,8 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
++AUTOMAKE_OPTIONS = subdir-objects
++
+ pkgpythondir = $(pyexecdir)/gtk-2.0
+ pkgpyexecdir = $(pyexecdir)/gtk-2.0
+ 
+diff --git a/libcore/Makefile.am b/libcore/Makefile.am
+index edce528a7..7168b85b3 100644
+--- a/libcore/Makefile.am
++++ b/libcore/Makefile.am
+@@ -16,7 +16,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
+-AUTOMAKE_OPTIONS = 
++AUTOMAKE_OPTIONS = subdir-objects
+ 
+ SUBDIRS = parser vm
+ 
+diff --git a/libdevice/Makefile.am b/libdevice/Makefile.am
+index 6cd0c9e90..86fa3f77a 100644
+--- a/libdevice/Makefile.am
++++ b/libdevice/Makefile.am
+@@ -19,7 +19,7 @@
+ 
+ ## Process this file with automake to generate Makefile.in
+ 
+-AUTOMAKE_OPTIONS =
++AUTOMAKE_OPTIONS = subdir-objects
+ 
+ # this is where Gnash plugins get installed
+ pluginsdir = $(libdir)/gnash/plugins
+diff --git a/libmedia/Makefile.am b/libmedia/Makefile.am
+index ba7e94079..ca6a00364 100644
+--- a/libmedia/Makefile.am
++++ b/libmedia/Makefile.am
+@@ -14,7 +14,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
+-AUTOMAKE_OPTIONS = foreign
++AUTOMAKE_OPTIONS = foreign subdir-objects
+ 
+ AM_CXXFLAGS = $(CROSS_CXXFLAGS) -DREGISTER_MEDIA_HANDLERS
+ AM_LDFLAGS = $(CROSS_LDFLAGS)
+diff --git a/libmedia/ffmpeg/MediaHandlerFfmpeg.cpp b/libmedia/ffmpeg/MediaHandlerFfmpeg.cpp
+index 127aaaa08..216d96b1f 100644
+--- a/libmedia/ffmpeg/MediaHandlerFfmpeg.cpp
++++ b/libmedia/ffmpeg/MediaHandlerFfmpeg.cpp
+@@ -149,7 +149,7 @@ MediaHandlerFfmpeg::cameraNames(std::vector<std::string>& /*names*/) const
+ size_t
+ MediaHandlerFfmpeg::getInputPaddingSize() const
+ {
+-    return FF_INPUT_BUFFER_PADDING_SIZE;
++    return AV_INPUT_BUFFER_PADDING_SIZE;
+ }
+ 
+ } // gnash.media.ffmpeg namespace 
+diff --git a/libmedia/ffmpeg/MediaParserFfmpeg.cpp b/libmedia/ffmpeg/MediaParserFfmpeg.cpp
+index 9ceb8b022..a27ca56c7 100644
+--- a/libmedia/ffmpeg/MediaParserFfmpeg.cpp
++++ b/libmedia/ffmpeg/MediaParserFfmpeg.cpp
+@@ -64,7 +64,7 @@ AVInputFormat*
+ MediaParserFfmpeg::probeStream()
+ {
+     const size_t probeSize = 4096;
+-    const size_t bufSize = probeSize + FF_INPUT_BUFFER_PADDING_SIZE;
++    const size_t bufSize = probeSize + AV_INPUT_BUFFER_PADDING_SIZE;
+ 
+ 	std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[bufSize]);
+ 
+@@ -173,7 +173,7 @@ MediaParserFfmpeg::parseVideoFrame(AVPacket& packet)
+ 
+ 	// TODO: We might avoid the copy as a whole by making EncodedVideoFrame
+ 	//       virtual.
+-	size_t allocSize = packet.size + FF_INPUT_BUFFER_PADDING_SIZE;
++	size_t allocSize = packet.size + AV_INPUT_BUFFER_PADDING_SIZE;
+ 	std::uint8_t* data = new std::uint8_t[allocSize];
+ 	std::copy(packet.data, packet.data+packet.size, data);
+ 	std::unique_ptr<EncodedVideoFrame> frame(new EncodedVideoFrame(data, packet.size, 0, timestamp));
+@@ -221,7 +221,7 @@ MediaParserFfmpeg::parseAudioFrame(AVPacket& packet)
+ 
+ 	// TODO: We might avoid the copy as a whole by making EncodedAudioFrame
+ 	//       virtual.
+-	size_t allocSize = packet.size + FF_INPUT_BUFFER_PADDING_SIZE;
++	size_t allocSize = packet.size + AV_INPUT_BUFFER_PADDING_SIZE;
+ 	std::uint8_t* data = new std::uint8_t[allocSize];
+ 	std::copy(packet.data, packet.data+packet.size, data);
+ 
+diff --git a/librender/Makefile.am b/librender/Makefile.am
+index 970d78def..88462a0cb 100644
+--- a/librender/Makefile.am
++++ b/librender/Makefile.am
+@@ -19,7 +19,7 @@
+ 
+ ## Process this file with automake to generate Makefile.in
+ 
+-AUTOMAKE_OPTIONS =
++AUTOMAKE_OPTIONS = subdir-objects
+ 
+ # this is where Gnash plugins get installed
+ pluginsdir = $(libdir)/gnash/plugins
+diff --git a/librender/agg/Renderer_agg.cpp b/librender/agg/Renderer_agg.cpp
+index e15ca2d2c..a0448c859 100644
+--- a/librender/agg/Renderer_agg.cpp
++++ b/librender/agg/Renderer_agg.cpp
+@@ -418,8 +418,8 @@ public:
+             _ras.add_path(stroke);
+ 
+             // Set the color and render the scanlines
+-            _renderer.color(agg::rgba8_pre(color.m_r, color.m_g, 
+-                        color.m_b, color.m_a));
++            _renderer.color(agg::rgba8(color.m_r, color.m_g,
++                        color.m_b, color.m_a).premultiply());
+ 
+             agg::render_scanlines(_ras, sl, _renderer);
+ 
+@@ -553,7 +553,7 @@ public:
+     
+     // cloning image accessor is used to avoid disturbing pixels at
+     // the edges for rotated video. 
+-    typedef agg::image_accessor_clone<SourceFormat> Accessor;
++    typedef agg::image_accessor_clone<const SourceFormat> Accessor;
+ 
+     /// Types used for different quality.
+     //
+@@ -615,7 +615,7 @@ private:
+         }
+         else {
+             // Untested.
+-            typedef agg::scanline_u8_am<agg::alpha_mask_gray8> Scanline;
++            typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> Scanline;
+             Scanline sl(masks.back().getMask());
+             renderScanlines(path, rbase, sl, sg);
+         }
+@@ -852,7 +852,7 @@ public:
+     // clear the stage using the background color
+     if ( ! _clipbounds.empty() )
+     {
+-        const agg::rgba8& col = agg::rgba8_pre(bg.m_r, bg.m_g, bg.m_b, bg.m_a);
++        const agg::rgba8& col = agg::rgba8(bg.m_r, bg.m_g, bg.m_b, bg.m_a).premultiply();
+         for (const auto& bounds : _clipbounds)
+         {
+             clear_framebuffer(bounds, col);
+@@ -981,7 +981,7 @@ public:
+         }
+         else {
+             // Mask is active!
+-            typedef agg::scanline_u8_am<agg::alpha_mask_gray8> sl_type;
++            typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> sl_type;
+             sl_type sl(_alphaMasks.back().getMask());      
+             lr.render(sl, stroke, color);
+         }
+@@ -1425,7 +1425,7 @@ public:
+     
+       // Mask is active, use alpha mask scanline renderer
+       
+-      typedef agg::scanline_u8_am<agg::alpha_mask_gray8> scanline_type;
++      typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> scanline_type;
+       
+       scanline_type sl(_alphaMasks.back().getMask());
+       
+@@ -1538,7 +1538,7 @@ public:
+       // Woohoo! We're drawing a nested mask! Use the previous mask while 
+       // drawing the new one, the result will be the intersection.
+       
+-      typedef agg::scanline_u8_am<agg::alpha_mask_gray8> scanline_type;
++      typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> scanline_type;
+       
+       scanline_type sl(_alphaMasks[mask_count - 2].getMask());
+       
+@@ -1632,7 +1632,7 @@ public:
+     
+       // Mask is active, use alpha mask scanline renderer
+       
+-      typedef agg::scanline_u8_am<agg::alpha_mask_gray8> scanline_type;
++      typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> scanline_type;
+       
+       scanline_type sl(_alphaMasks.back().getMask());
+       
+@@ -1740,7 +1740,7 @@ public:
+         ras.add_path(stroke);
+         
+         rgba color = cx.transform(lstyle.get_color());
+-        ren_sl.color(agg::rgba8_pre(color.m_r, color.m_g, color.m_b, color.m_a));       
++        ren_sl.color(agg::rgba8(color.m_r, color.m_g, color.m_b, color.m_a).premultiply());
+                 
+         agg::render_scanlines(ras, sl, ren_sl);
+         
+@@ -1812,7 +1812,7 @@ public:
+       // fill polygon
+       if (fill.m_a>0) {
+         ras.add_path(path);
+-        ren_sl.color(agg::rgba8_pre(fill.m_r, fill.m_g, fill.m_b, fill.m_a));
++        ren_sl.color(agg::rgba8(fill.m_r, fill.m_g, fill.m_b, fill.m_a).premultiply());
+         
+         agg::render_scanlines(ras, sl, ren_sl);
+       }
+@@ -1823,7 +1823,7 @@ public:
+         
+         stroke.width(1);
+         
+-        ren_sl.color(agg::rgba8_pre(outline.m_r, outline.m_g, outline.m_b, outline.m_a));
++        ren_sl.color(agg::rgba8(outline.m_r, outline.m_g, outline.m_b, outline.m_a).premultiply());
+         
+         ras.add_path(stroke);
+         
+@@ -1841,7 +1841,7 @@ public:
+     
+       // apply mask
+       
+-      typedef agg::scanline_u8_am<agg::alpha_mask_gray8> sl_type; 
++      typedef agg::scanline_u8_am<const agg::alpha_mask_gray8> sl_type;
+       
+       sl_type sl(_alphaMasks.back().getMask());
+          
+diff --git a/librender/agg/Renderer_agg_style.h b/librender/agg/Renderer_agg_style.h
+index 16e177b39..5942a101a 100644
+--- a/librender/agg/Renderer_agg_style.h
++++ b/librender/agg/Renderer_agg_style.h
+@@ -614,8 +614,8 @@ struct AddStyles : boost::static_visitor<>
+ 
+         // add the color to our self-made style handler (basically
+         // just a list)
+-        _sh.add_color(agg::rgba8_pre(color.m_r, color.m_g, color.m_b,
+-                  color.m_a));
++        _sh.add_color(agg::rgba8(color.m_r, color.m_g, color.m_b,
++                  color.m_a).premultiply());
+     }
+ 
+     void operator()(const BitmapFill& f) const {
+@@ -652,11 +652,11 @@ struct AddStyles : boost::static_visitor<>
+ 
+         if (!bm) {
+             // See misc-swfmill.all/missing_bitmap.swf
+-            _sh.add_color(agg::rgba8_pre(255,0,0,255));
++            _sh.add_color(agg::rgba8(255,0,0,255).premultiply());
+         }
+         else if ( bm->disposed() ) {
+             // See misc-ming.all/BeginBitmapFill.swf
+-            _sh.add_color(agg::rgba8_pre(0,0,0,0));
++            _sh.add_color(agg::rgba8(0,0,0,0).premultiply());
+         }
+         else {
+             _sh.add_bitmap(dynamic_cast<const agg_bitmap_info*>(bm),
+diff --git a/libsound/Makefile.am b/libsound/Makefile.am
+index f351eff11..8f0fb89a3 100644
+--- a/libsound/Makefile.am
++++ b/libsound/Makefile.am
+@@ -15,7 +15,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
+-AUTOMAKE_OPTIONS = foreign
++AUTOMAKE_OPTIONS = foreign subdir-objects
+ 
+ pkglib_LTLIBRARIES = libgnashsound.la
+ 
+diff --git a/plugin/npapi/Makefile.am b/plugin/npapi/Makefile.am
+index e10126900..7faa66059 100644
+--- a/plugin/npapi/Makefile.am
++++ b/plugin/npapi/Makefile.am
+@@ -17,7 +17,7 @@
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
+ 
+-AUTOMAKE_OPTIONS = 
++AUTOMAKE_OPTIONS = subdir-objects
+ 
+ SUBDIRS =
+ 
+diff --git a/testsuite/network.all/Makefile.am b/testsuite/network.all/Makefile.am
+index 20ebea636..44c607686 100644
+--- a/testsuite/network.all/Makefile.am
++++ b/testsuite/network.all/Makefile.am
+@@ -17,7 +17,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ 
+-AUTOMAKE_OPTIONS = dejagnu -Wno-portability
++AUTOMAKE_OPTIONS = dejagnu -Wno-portability subdir-objects
+ 
+ abs_top_builddir=$(shell cd $(top_builddir); pwd)
+ abs_builddir=$(shell cd $(top_builddir)/testsuite/network.all; pwd)

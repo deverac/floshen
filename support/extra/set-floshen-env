@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# This file must be 'sourced' in the ./inst (or './dist') directory. e.g.
+#    cd ./inst
+#    source set-floshen-env.sh
+
+# Get current directory.
+PWD=`pwd`
+
+# Only add to PATH if it doesn't already exist.
+if ! (echo ":${PATH}:" | grep -q ":${PWD}/bin:"); then
+    PATH=${PWD}/bin:$PATH
+fi
+
+export LD_LIBRARY_PATH=${PWD}/lib

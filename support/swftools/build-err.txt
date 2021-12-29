@@ -1,0 +1,7 @@
+./configure RFX_CHECK_OLDGCC: command not found
+Your gcc is too old to compile this!
+Newer versions require at least gcc 3.0.0
+
+    $ aclocal -I m4
+    $ autoconf
+    $ ./configure

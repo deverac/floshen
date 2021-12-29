@@ -1,0 +1,6 @@
+Running setup.py requires python2; python3 will not work.
+
+    # apt-get install python2-dev
+    $ cd ./libming/py_ext
+    $ python setup.py build
+    $ python setup.py install --prefix <path-to-floshen-inst>
