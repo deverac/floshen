@@ -429,6 +429,7 @@ tgt_swftools_bld() {
             (git checkout . && (git branch --delete --force ${BRANCH_NAME} || true )) &> /dev/null
             # Checkout commit id; 772e55a271f66818b06c6e8c9b839befa51248f4
             git checkout 772e55a -b ${BRANCH_NAME}
+            git apply ${SUPPORT_DIR}/swftools/swftools00.diff
 
             ./configure ${ACONF_PFX}
         fi
