@@ -191,6 +191,7 @@ tgt_libgstpluginsbase_bld() {
             # Revert changes && delete target branch if it exists
             (git checkout . && (git branch --delete --force ${BRANCH_NAME} || true)) &> /dev/null
             git checkout tags/gst-plugins-base-0.10.36 -b ${BRANCH_NAME}
+            git apply ${SUPPORT_DIR}/gst-plugins-base/gst-plugins-base01.diff
 
             # Update submodule
             if [ "x"$(ls -1 ./common | wc -l) = "x0" ]; then

@@ -1,0 +1,12 @@
+diff --git a/tests/check/Makefile.am b/tests/check/Makefile.am
+index 3280ba3018..f00956998f 100644
+--- a/tests/check/Makefile.am
++++ b/tests/check/Makefile.am
+@@ -1,5 +1,7 @@
+ include $(top_srcdir)/common/check.mak
+ 
++AUTOMAKE_OPTIONS = subdir-objects
++
+ CHECK_REGISTRY = $(top_builddir)/tests/check/test-registry.reg
+ TEST_FILES_DIRECTORY = $(top_srcdir)/tests/files
+ 
