@@ -412,6 +412,45 @@ tgt_swfdec_inst() {
 
 #################################
 ##
+##    SWFMILL
+##
+#################################
+tgt_swfmill_bld() {
+    local BRANCH_NAME=${BRANCH_PFX}-bld
+
+    cache_source https://github.com/djcsdy/swfmill.git swfmill
+
+    if [ ! -e ./swfmill ]; then
+        cp -r ${CACHE_DIR}/swfmill/ .
+    fi
+
+    cd ./swfmill
+        if is_git_branch_name "master"; then
+            # Revert changes && delete target branch if it exists
+            (git checkout . && (git branch --delete --force ${BRANCH_NAME} || true)) &> /dev/null
+            # Checkout commit id; 53d769029adc9d817972e1ccd648b7b335bf78b7
+            git checkout 53d7690 -b ${BRANCH_NAME}
+
+            ./autogen.sh
+            ./configure ${ACONF_PFX}
+        fi
+
+        make
+    cd ..
+}
+
+tgt_swfmill_inst() {
+    cd ./swfmill
+        make install
+    cd ..
+}
+
+
+
+
+
+#################################
+##
 ##    SWFTOOLS
 ##
 #################################
@@ -523,6 +562,12 @@ build_swfdec() {
     cp_support_files
 }
 
+build_swfmill() {
+    tgt_swfmill_bld
+    tgt_swfmill_inst
+    cp_support_files
+}
+
 build_swftools() {
     tgt_swftools_bld
     tgt_swftools_inst
@@ -544,6 +589,7 @@ do_most() {
     build_libming
     build_lightspark
     build_swfdec
+    build_swfmill
     build_swftools
 }
 
@@ -633,6 +679,9 @@ do_dist() {
 
             # swfdec
             cp_bin_files swfdec-extract swfdec-dump swfdec-play
+
+            # swfmill
+            cp_bin_files swfmill
 
             # swftools
             cp_bin_files as3compile font2swf gif2swf jpeg2swf pdf2swf png2swf swfbbox swfc swfcombine swfdump swfextract swfrender swfstrings wav2swf
@@ -733,6 +782,7 @@ show_help() {
     echo "  ruffle     - SWF player. REQUIRES accelerated video hardware (e.g. DirectX"
     echo "               11/12, Metal, Vulkan). OpenGL is not well supported."
     echo "  swfdec     - Library for decoding SWF files; includes a player."
+    echo "  swfmill    - An xml2swf and swf2xml processor with import functionality."
     echo "  swftools   - Tools to manipulate SWF files; includes a SWF compiler."
     echo ""
     echo "The apps will be auto-installed in '${INST_DIR}'."
@@ -790,7 +840,7 @@ select_app() {
             do_${APPL} $@
             ;;
 
-        gnash | libming | lightspark | ruffle |  swfdec | swftools)
+        gnash | libming | lightspark | ruffle |  swfdec | swfmill | swftools)
             build_${APPL} $@
             ;;
 

@@ -66,6 +66,12 @@ supported. ([Source code](https://github.com/ruffle-rs/ruffle))
     swfdec-play       SWF player. (Originally named 'swfplay'.)
 
 
+[**swfmill**](https://www.swfmill.org/): An xml2swf and swf2xml processor with import
+functions. ([Source code](https://github.com/djcsdy/swfmill))
+
+    swfmill           Generate SWF from assets (PNG, JPEG, TTF); extract assets from SWF.
+
+
 [**swftools**](http://swftools.org/): Tools to manipulate SWF files; includes
 a SWF compiler. ([Source code](https://github.com/matthiaskramm/swftools))
 
@@ -90,7 +96,7 @@ a SWF compiler. ([Source code](https://github.com/matthiaskramm/swftools))
 In order to build all the projects, a large number of supporting software
 packages must be installed. The packages can be installed using `apt-get`:
 
-> \# apt-get install autoconf automake autopoint cmake flex g++ git libagg-dev libavcodec-dev libavformat-dev libbison-dev libboost-dev libboost-program-options-dev libboost-thread-dev libcurl4-openssl-dev libgconf2-dev libgif-dev libglew-dev libglib2.0-dev libgtk2.0-dev libjemalloc-dev libjpeg-dev libltdl3-dev liblzma-dev libpango1.0-dev librtmp-dev libsdl1.2-dev libsdl2-dev libsdl2-mixer-dev libsoup2.4-dev libswscale-dev libtool libxml2-dev make nasm pkg-config
+> \# apt-get install autoconf automake autopoint cmake flex g++ git libagg-dev libavcodec-dev libavformat-dev libbison-dev libboost-dev libboost-program-options-dev libboost-thread-dev libcurl4-openssl-dev libgconf2-dev libgif-dev libglew-dev libglib2.0-dev libgtk2.0-dev libjemalloc-dev libjpeg-dev libltdl3-dev libxslt1-dev liblzma-dev libpango1.0-dev librtmp-dev libsdl1.2-dev libsdl2-dev libsdl2-mixer-dev libsoup2.4-dev libswscale-dev libtool libxml2-dev make nasm pkg-config xsltproc
 
 If you do not want to install all the supporting software packages, but want
 to build an individual project, you will have to repeatedly attempt to build the
